@@ -178,6 +178,55 @@ export default function UsernamePage() {
 `.trim()
 );
 
-// Basic data file
+// Basic data file (fixed syntax)
 fs.writeFileSync(
-  path.join(root, "data", "
+  path.join(root, "data", "games.js"),
+  `
+export const games = [
+  { id: 1, home: "Alabama", away: "Georgia" },
+  { id: 2, home: "Ohio State", away: "Michigan" },
+  { id: 3, home: "Texas", away: "Oklahoma" }
+];
+`.trim()
+);
+
+// Simple context placeholder
+fs.writeFileSync(
+  path.join(root, "context", "PicksContext.js"),
+  `
+"use client";
+
+import { createContext, useContext, useState } from "react";
+
+const PicksContext = createContext(null);
+
+export function PicksProvider({ children }) {
+  const [picks, setPicks] = useState({});
+  return (
+    <PicksContext.Provider value={{ picks, setPicks }}>
+      {children}
+    </PicksContext.Provider>
+  );
+}
+
+export function usePicks() {
+  return useContext(PicksContext);
+}
+`.trim()
+);
+
+// Simple shared component
+fs.writeFileSync(
+  path.join(root, "components", "Header.jsx"),
+  `
+export default function Header() {
+  return (
+    <header style={{ padding: "1rem", borderBottom: "1px solid #ddd" }}>
+      <h1>CFB Pick'em</h1>
+    </header>
+  );
+}
+`.trim()
+);
+
+console.log("CFB Pick'em app structure generated.");
